@@ -54,8 +54,7 @@ def g(x):
 def optimal_control(x, dVdx):
     """
     Compute the optimal safety controller for the 13D quadrotor system for
-    states x and
-    value function spatial gradients dVdx.
+    states x and value function spatial gradients dVdx.
 
     args:
         x:     torch tensor with shape [batch_size, 13]
@@ -65,7 +64,14 @@ def optimal_control(x, dVdx):
         u_opt: torch tensor with shape [batch_size, 4]
     """
     # YOUR CODE HERE
-    pass
+
+    u_bar = torch.tensor([20., 8., 8., 4.], dtype=x.dtype)
+    # dVdx: [batch, 13], g(x): [batch, 13, 4]
+    # dVdx @ g(x) -> [batch, 4]
+    dVdx_G = torch.bmm(dVdx.unsqueeze(1), g(x)).squeeze(1)
+
+    return u_bar * torch.sign(dVdx_G)
+
 
 def hamiltonian(x, dVdx):
     """
@@ -81,7 +87,11 @@ def hamiltonian(x, dVdx):
         ham:  torch tensor with shape [batch_size]
     """
     # YOUR CODE HERE
-    pass
+    u_bar = torch.tensor([20., 8., 8., 4.], dtype=x.dtype)
+    Lf_V = (dVdx * f(x)).sum(dim=1)
+    dVdx_G = torch.bmm(dVdx.unsqueeze(1), g(x)).squeeze(1)
+
+    return Lf_V + (torch.abs(dVdx_G) * u_bar).sum(dim=1)
 
 def hji_vi_loss(x, l, V, dVdt, dVdx):
     """
@@ -107,4 +117,8 @@ def hji_vi_loss(x, l, V, dVdt, dVdx):
         h2:   torch tensor with shape [batch_size]
     """
     # YOUR CODE HERE
-    pass
+    ham = hamiltonian(x, dVdx)
+    pde_residual = dVdt + ham
+    boundary_residual = l - V
+    
+    return torch.abs(torch.min(pde_residual, boundary_residual))

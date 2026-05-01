@@ -24,21 +24,21 @@ print()
 
 
 print('TESTING optimal_control...')
-with open('tests/optimal_control_test_cases.pickle', 'rb') as f:
+with open('hw2/tests/optimal_control_test_cases.pickle', 'rb') as f:
     optimal_control_test_cases = pickle.load(f)
 run_tests(optimal_control, optimal_control_test_cases)
 print()
 
 
 print('TESTING hamiltonian...')
-with open('tests/hamiltonian_test_cases.pickle', 'rb') as f:
+with open('hw2/tests/hamiltonian_test_cases.pickle', 'rb') as f:
     hamiltonian_test_cases = pickle.load(f)
 run_tests(hamiltonian, hamiltonian_test_cases)
 print()
 
 
 print('TESTING hji_vi_loss...')
-with open('tests/hji_vi_loss_test_cases.pickle', 'rb') as f:
+with open('hw2/tests/hji_vi_loss_test_cases.pickle', 'rb') as f:
     hji_vi_loss_test_cases = pickle.load(f)
 run_tests(hji_vi_loss, hji_vi_loss_test_cases)
 print()
