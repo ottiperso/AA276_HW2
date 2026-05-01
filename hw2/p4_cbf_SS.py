@@ -7,7 +7,7 @@ from problem4_helper import NeuralCBF
 # load model
 neuralcbf = NeuralCBF(ckpt_path='outputs/cbf.ckpt')
 
-# state space bounds from problem statement
+# bounds
 state_lo = torch.tensor([-3,-3,-3,-1,-1,-1,-1,-5,-5,-5,-5,-5,-5], dtype=torch.float32)
 state_hi = torch.tensor([ 3, 3, 3, 1, 1, 1, 1, 5, 5, 5, 5, 5, 5], dtype=torch.float32)
 
@@ -23,4 +23,4 @@ for _ in tqdm.tqdm(range(N // batch_size)):
     safe_count += (values > 0).sum().item()
 
 safe_ratio = safe_count / N
-print(f"Neural CBF safe set proportion: {safe_ratio:.4f}")
+print(f"Neural CBF safe set ratio: {safe_ratio:.4f}")
